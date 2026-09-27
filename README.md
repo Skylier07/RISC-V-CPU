@@ -1,6 +1,7 @@
 # Single-Cycle 32-Bit RISC-V CPU Practice
 
 [![Last Commit](https://img.shields.io/github/last-commit/Skylier07/verilog-practice)](https://github.com/Skylier07/verilog-practice/commits/main)
+
 This repository is my first large-scale Verilog RTL design project: a 32-bit single-cycle RISC-V CPU implemented with SystemVerilog. 
 My practice projects and learning documents can be found in this git repo [Verilog Practice Repository](https://github.com/Skylier07/verilog-practice)
 
