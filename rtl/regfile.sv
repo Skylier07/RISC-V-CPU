@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module regfile(
     input logic clk,
     input logic reset,
@@ -10,7 +11,7 @@ module regfile(
     output logic[31:0] read_data2
 
 );
-    logic[31:0] registers[0:31]
+    logic[31:0] registers[0:31];
     int i;
 always_comb begin
     if(rs1 ==0)
@@ -31,7 +32,7 @@ always_ff @(posedge clk) begin
     end
 
     else if(write_en && (rd!=0)) begin
-        register[rd] <= write_data;
+        registers[rd] <= write_data;
     end
 
 
