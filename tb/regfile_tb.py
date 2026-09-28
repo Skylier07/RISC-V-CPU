@@ -30,10 +30,14 @@ async def write_reg(dut, rd, value):
 
 async def read_rs1(dut, register):
     dut.rs1.value = register
+    await ReadOnly()
+    await NextTimeStep()
     return dut.read_data1.value
 
 async def read_rs2(dut, register):
     dut.rs2.value = register
+    await ReadOnly()
+    await NextTimeStep()
     return dut.read_data2.value
 
 
