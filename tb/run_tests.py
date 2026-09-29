@@ -24,6 +24,14 @@ TESTS = {
         "test_module": "pc_tb",
     },
 
+    "instruction_decode": {
+        "sources": [
+            rtl_dir / "instruction_decode.sv",
+        ],
+        "top": "instr_decode",
+        "test_module": "instruction_decode_tb",
+    },
+
 
 }
 
