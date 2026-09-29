@@ -1,4 +1,4 @@
-# Single-Cycle 32-Bit RISC-V CPU Practice
+# Single-Cycle 32-Bit RISC-V CPU 
 
 [![Last Commit](https://img.shields.io/github/last-commit/Skylier07/verilog-practice)](https://github.com/Skylier07/verilog-practice/commits/main)
 

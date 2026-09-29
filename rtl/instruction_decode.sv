@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module instr_decode(
     input logic [31:0] instruction, 
     output logic[4:0] rs1,
