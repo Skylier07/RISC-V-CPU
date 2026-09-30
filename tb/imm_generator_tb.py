@@ -21,7 +21,7 @@ async def build_instruct(op, rd, funct3, rs1, rs2, funct7):
 
     return instruction
 # https://www.cs.cornell.edu/courses/cs3410/2026sp/rsrc/riscv-ref.html
-async def build_i_type(immediate):
+def build_i_type(immediate):
     imm_12bit = immediate & 0xFFF 
 
     instruction = imm_12bit << 20
@@ -61,13 +61,10 @@ def build_b_type(immediate):
     return instruction
 
 
-def extend_sign(value, bits):
-    signed = 1 << (bits-1)
-
-    if value & signed:
+def extend_sign(value, bits=32):
+    if value & (1 << (bits - 1)):
         value -= 1 << bits
-
-    return value & 0xFFFFFFFF
+    return value
 
 
 
@@ -101,7 +98,7 @@ async def test_i_type_negative(dut):
     await Timer(1, unit="ns")
 
 
-    assert int(dut.immediate.value) == -3
+    assert extend_sign(int(dut.immediate.value)) == -3
 
 @cocotb.test()
 async def test_s_type_positive(dut):
@@ -126,7 +123,7 @@ async def test_s_type_negative(dut):
 
     await Timer(1, unit="ns")
 
-    assert int(dut.immediate.value) == -21
+    assert extend_sign(int(dut.immediate.value)) == -21
 
 
 
@@ -144,7 +141,7 @@ async def test_b_type_positive(dut):
 
 
 @cocotb.test()
-async def test_s_type_negative(dut):
+async def test_b_type_negative(dut):
 
     imm = -8
 
@@ -153,5 +150,5 @@ async def test_s_type_negative(dut):
 
     await Timer(1, unit="ns")
 
-    assert int(dut.immediate.value) == -8
+    assert extend_sign(int(dut.immediate.value)) == -8
 
