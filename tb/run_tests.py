@@ -31,6 +31,13 @@ TESTS = {
         "top": "instr_decode",
         "test_module": "instruction_decode_tb",
     },
+    "imm_gen": {
+        "sources": [
+            rtl_dir / "imm_generator.sv",
+        ],
+        "top": "imm_gen",
+        "test_module": "imm_generator_tb",
+    },
 
 
 }
