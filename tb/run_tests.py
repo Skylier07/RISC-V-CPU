@@ -39,6 +39,15 @@ TESTS = {
         "test_module": "imm_generator_tb",
     },
 
+    "alu": {
+        "sources": [
+            rtl_dir / "alu.sv",
+        ],
+        "top": "alu",
+        "test_module": "alu_tb",
+    },
+
+
 
 }
 

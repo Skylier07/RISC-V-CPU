@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module alu (
     input  logic [31:0] operand_a,
     input  logic [31:0] operand_b,
