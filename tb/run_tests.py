@@ -47,6 +47,14 @@ TESTS = {
         "test_module": "alu_tb",
     },
 
+    "control_unit": {
+        "sources": [
+            rtl_dir / "control_unit.sv",
+        ],
+        "top": "control_unit",
+        "test_module": "control_unit_tb",
+    },    
+
 
 
 }
