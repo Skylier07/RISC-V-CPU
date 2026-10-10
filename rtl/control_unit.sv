@@ -1,3 +1,4 @@
+
 `timescale 1ns/1ps
 
 module control_unit (
@@ -12,16 +13,14 @@ module control_unit (
     output logic       valid
 );
 
-
 localparam logic [2:0] ALU_ADD = 3'b000;
 localparam logic [2:0] ALU_SUB = 3'b001;
 localparam logic [2:0] ALU_AND = 3'b010;
 localparam logic [2:0] ALU_OR  = 3'b011;
 localparam logic [2:0] ALU_XOR = 3'b100;
 localparam logic [2:0] ALU_SLT = 3'b101;
-localparam logic [2:0] IMM_I = 0'b000;
 
-
+localparam logic [2:0] IMM_I = 3'b000;
 
 always_comb begin
     alu_op      = ALU_ADD;
@@ -30,103 +29,81 @@ always_comb begin
     imm_type    = IMM_I;
     valid       = 1'b0;
 
-    case(opcode)
-        7'b0110011: //R-Type
-            case(funct3)
-                3'b000: 
-                    case(funct7)
-                        7'b0000000:
+    case (opcode)
+
+        // R-Type
+        7'b0110011: begin
+            case (funct3)
+                3'b000: begin
+                    case (funct7)
+                        7'b0000000: begin
                             alu_op = ALU_ADD;
-                            alu_src_imm = 1'b0;
-                            reg_write = 1'b1;
-                            imm_type = IMM_I; 
                             valid = 1'b1;
-                        7'b0100000:
+                        end
+                        7'b0100000: begin
                             alu_op = ALU_SUB;
-                            alu_src_imm = 1'b0;
-                            reg_write = 1'b1;
-                            imm_type = IMM_I; 
                             valid = 1'b1;
+                        end
                     endcase
-                3'b111:                                                  
+                end
+                3'b111: begin
+                    if (funct7 == 7'b0000000) begin
+                        alu_op = ALU_AND;
+                        valid = 1'b1;
+                    end
+                end
+
+                3'b110: begin
+                    if (funct7 == 7'b0000000) begin
+                        alu_op = ALU_OR;
+                        valid = 1'b1;
+                    end
+                end
+
+                3'b100: begin
+                    if (funct7 == 7'b0000000) begin
+                        alu_op = ALU_XOR;
+                        valid = 1'b1;
+                    end
+                end
+
+                3'b010: begin
+                    if (funct7 == 7'b0000000) begin
+                        alu_op = ALU_SLT;
+                        valid = 1'b1;
+                    end
+                end
+            endcase
+        end
+
+        // I-Type
+        7'b0010011: begin
+            case (funct3)
+                3'b000: begin
+                    alu_op = ALU_ADD;
+                    valid = 1'b1;
+                end
+                3'b111: begin
                     alu_op = ALU_AND;
-                    alu_src_imm = 1'b0;
-                    reg_write = 1'b1;
-                    imm_type = IMM_I; 
-                    valid = 1'b1;    
-                3'b110:                                                  
+                    valid = 1'b1;
+                end
+                3'b110: begin
                     alu_op = ALU_OR;
-                    alu_src_imm = 1'b0;
-                    reg_write = 1'b1;
-                    imm_type = IMM_I; 
-                    valid = 1'b1;  
-                3'b110:                                                  
+                    valid = 1'b1;
+                end
+                3'b100: begin
                     alu_op = ALU_XOR;
-                    alu_src_imm = 1'b0;
-                    reg_write = 1'b1;
-                    imm_type = IMM_I; 
-                    valid = 1'b1;   
-                3'b010:                                                  
+                    valid = 1'b1;
+                end
+                3'b010: begin
                     alu_op = ALU_SLT;
-                    alu_src_imm = 1'b0;
-                    reg_write = 1'b1;
-                    imm_type = IMM_I; 
-                    valid = 1'b1;   
-                3'b011:                                                  
-                    alu_op = ALU_SLT;
-                    alu_src_imm = 1'b0;
-                    reg_write = 1'b1;
-                    imm_type = IMM_I; 
-                    valid = 1'b1;    
-            endcase   
-        7'b0010011: //I-Type
-            case(funct3)
-                3'b000: 
-                    case(funct7)
-                        7'b0000000:
-                            alu_op = ALU_ADDI;
-                            alu_src_imm = 1'b1;
-                            reg_write = 1'b1;
-                            imm_type = IMM_I; 
-                            valid = 1'b1;
-                        7'b0100000:
-                            alu_op = ALU_SUBI;
-                            alu_src_imm = 1'b1;
-                            reg_write = 1'b1;
-                            imm_type = IMM_I; 
-                            valid = 1'b1;
-                    endcase
-                3'b111:                                                  
-                    alu_op = ALU_ANDI;
-                    alu_src_imm = 1'b1;
-                    reg_write = 1'b1;
-                    imm_type = IMM_I; 
-                    valid = 1'b1;    
-                3'b110:                                                  
-                    alu_op = ALU_ORI;
-                    alu_src_imm = 1'b1;
-                    reg_write = 1'b1;
-                    imm_type = IMM_I; 
-                    valid = 1'b1;  
-                3'b110:                                                  
-                    alu_op = ALU_XORI;
-                    alu_src_imm = 1'b1;
-                    reg_write = 1'b1;
-                    imm_type = IMM_I; 
-                    valid = 1'b1;   
-                3'b010:                                                  
-                    alu_op = ALU_SLTI;
-                    alu_src_imm = 1'b1;
-                    reg_write = 1'b1;
-                    imm_type = IMM_I; 
-                    valid = 1'b1;   
-                3'b011:                                                  
-                    alu_op = ALU_SLTI;
-                    alu_src_imm = 1'b1;
-                    reg_write = 1'b1;
-                    imm_type = IMM_I; 
-                    valid = 1'b1;    
-            endcase                                                                                  
+                    valid = 1'b1;
+                end
+            endcase
+            alu_src_imm = 1'b1; 
+        end
+        default: ;
     endcase
+    reg_write = valid;
 end
 endmodule
