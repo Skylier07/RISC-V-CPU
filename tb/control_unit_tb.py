@@ -106,3 +106,63 @@ async def test_r_type(dut):
         expected_reg_write=1,
         expected_valid=1,
     )
+
+@cocotb.test()
+async def test_i_type(dut):
+    await control_input( #ADD / (and sub)
+        dut,
+        opcode=0b0010011,
+        funct3=0b000,
+        funct7=0b0000000,
+        expected_alu_op=ALU_ADD,
+        expected_alu_src_imm=1,
+        expected_reg_write=1,
+        expected_valid=1,
+    )
+
+
+    await control_input( #AND
+        dut,
+        opcode=0b0010011,
+        funct3=0b111,
+        funct7=0b0000000,
+        expected_alu_op=ALU_AND,
+        expected_alu_src_imm=1,
+        expected_reg_write=1,
+        expected_valid=1,
+    )
+
+    await control_input( #OR
+        dut,
+        opcode=0b0010011,
+        funct3=0b110,
+        funct7=0b0000000,
+        expected_alu_op=ALU_OR,
+        expected_alu_src_imm=1,
+        expected_reg_write=1,
+        expected_valid=1,
+    )
+
+
+    await control_input(    # XOR
+        dut,
+        opcode=0b0010011,
+        funct3=0b100,
+        funct7=0b0000000,
+        expected_alu_op=ALU_XOR,
+        expected_alu_src_imm=1,
+        expected_reg_write=1,
+        expected_valid=1,
+    )
+
+
+    await control_input(   # SLT
+        dut,
+        opcode=0b0010011,
+        funct3=0b010,
+        funct7=0b0000000,
+        expected_alu_op=ALU_SLT,
+        expected_alu_src_imm=1,
+        expected_reg_write=1,
+        expected_valid=1,
+    )

@@ -80,7 +80,7 @@ always_comb begin
         7'b0010011: begin
             case (funct3)
                 3'b000: begin
-                    alu_op = ALU_ADD;
+                    alu_op = ALU_ADD; //BOTH AND AND SUB
                     valid = 1'b1;
                 end
                 3'b111: begin
