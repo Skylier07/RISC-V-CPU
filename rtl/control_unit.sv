@@ -7,10 +7,10 @@ module control_unit (
     input  logic [6:0] funct7,
 
     output logic [2:0] alu_op,
-    output logic       alu_src_imm,
-    output logic       reg_write,
+    output logic alu_src_imm,
+    output logic reg_write,
     output logic [2:0] imm_type,
-    output logic       valid
+    output logic valid
 );
 
 localparam logic [2:0] ALU_ADD = 3'b000;

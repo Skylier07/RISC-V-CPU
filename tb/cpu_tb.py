@@ -76,16 +76,13 @@ async def test_instruction_decode(dut):
 
         dut.instruction.value = instruction
         await Timer(1, unit="ns")
-
     
         assert int(dut.opcode.value) == opcode
-
         assert int(dut.rd.value) == rd
-
         assert int(dut.funct3.value) == funct3
-
         assert int(dut.rs1.value) == rs1
-
         assert int(dut.rs2.value) == rs2
-
         assert int(dut.funct7.value) == funct7
+
+
+    
