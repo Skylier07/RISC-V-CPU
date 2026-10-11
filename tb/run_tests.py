@@ -54,7 +54,19 @@ TESTS = {
         "top": "control_unit",
         "test_module": "control_unit_tb",
     },    
-
+"cpu": {
+    "sources": [
+        rtl_dir / "cpu.sv",
+        rtl_dir / "pc.sv",
+        rtl_dir / "instruction_decode.sv",
+        rtl_dir / "regfile.sv",
+        rtl_dir / "alu.sv",
+        rtl_dir / "control_unit.sv",
+        rtl_dir / "imm_generator.sv",
+    ],
+    "top": "cpu",
+    "test_module": "cpu_tb",
+}
 
 
 }
