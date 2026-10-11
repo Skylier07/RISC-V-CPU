@@ -73,11 +73,11 @@ module cpu(
         .immediate(immediate)
     );
 
-    logic [2:0] alu_op,
-    logic alu_src_imm,
-    logic reg_write,
-    logic [2:0] imm_type,
-    logic valid
+    logic [2:0] alu_op;
+    logic alu_src_imm;
+    logic reg_write;
+    // logic [2:0] imm_type;
+    logic valid;
 
     control_unit u_control_unit(
         .opcode(opcode),
@@ -90,7 +90,7 @@ module cpu(
         .valid(valid)
     );
 
-    logic passed_data[31:0];
+    logic [31:0]passed_data;
     assign passed_data = alu_src_imm ? immediate : read_data2;
 
     logic [31:0] result; 
@@ -101,5 +101,14 @@ module cpu(
         .alu_op(alu_op),
         .result(result),
         .zero(zero)
-    )
+    );
+
+    assign write_data = result;
+    assign write_en = valid && reg_write;
+
+    assign instr_valid = valid;
+
+    assign debug_wb_en = write_en && (rd != '0);
+    assign debug_wb_rd = rd;
+    assign debug_wb_data = write_data;
 endmodule
