@@ -27,6 +27,7 @@ async def test_program_counter(dut):
     assert(await get_current_address(dut) == 0)
     for i in range(1, 100):
         await RisingEdge(dut.clk)
+        await ReadOnly()    
         assert(await get_current_address(dut)== i*4)
 
 
@@ -84,10 +85,98 @@ async def test_cpu_arithmetic(dut):
     # ADD x3, x1, x2
     await execute_instruction(
         dut,
-        await encode_r(
+        encode_r(
             3, 1, 2, 0b000, 0b0000000
         ),
         pc=8,
         rd=3,
         data=23
+    )
+
+    # ADDI x4, x2, -10
+    await execute_instruction(
+        dut,
+        encode_i(4, 2, -10),
+        pc=12,
+        rd=4,
+        data=-2
+    )
+
+    # SUB x5 x3, x2 
+    await execute_instruction(
+        dut,
+        encode_r(
+            5, 3, 2, 0b000, 0b0100000
+        ),
+        pc=16,
+        rd=5,
+        data=15
+    )
+
+    # SUB x6 x5, x4 
+    await execute_instruction(
+        dut,
+        encode_r(
+            6, 5, 4, 0b000, 0b0100000
+        ),
+        pc=20,
+        rd=6,
+        data=17
+    )
+
+
+@cocotb.test()
+async def test_cpu_logic(dut):
+    await setup_dut(dut)
+
+
+    # ADDI x1, x0, 15
+    await execute_instruction(
+        dut,
+        encode_i(1, 0, 0b0010),
+        pc=0,
+        rd=1,
+        data=0b0010
+    )
+
+    # ADDI x2, x0, 8
+    await execute_instruction(
+        dut,
+        encode_i(2, 0, 0b1110),
+        pc=4,
+        rd=2,
+        data=0b1110
+    )
+
+    # AND x3, x1, x2
+    await execute_instruction(
+        dut,
+        encode_r(
+            3, 1, 2, 0b111, 0b0000000
+        ),
+        pc=8,
+        rd=3,
+        data=0b0010
+    )
+
+    # OR x4, x1, x2
+    await execute_instruction(
+        dut,
+        encode_r(
+            4, 1, 2, 0b110, 0b0000000
+        ),
+        pc=12,
+        rd=4,
+        data=0b1110
+    )
+
+    # XOR x5, x1, x2
+    await execute_instruction(
+        dut,
+        encode_r(
+            5, 1, 2, 0b100, 0b0000000
+        ),
+        pc=16,
+        rd=5,
+        data=0b1100
     )

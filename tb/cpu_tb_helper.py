@@ -16,8 +16,11 @@ async def reset_dut(dut):
     await RisingEdge(dut.clk)
     await RisingEdge(dut.clk)
 
+    await FallingEdge(dut.clk)
     dut.reset.value =0
-    await RisingEdge(dut.clk)
+
+    await Timer(1, unit="ns")
+
 
 
 async def get_current_address(dut):
@@ -77,7 +80,7 @@ async def execute_instruction(dut, instruction, pc, rd, data):
 
     assert int(dut.debug_wb_en.value) == 1
     assert int(dut.debug_wb_rd.value) == rd
-    assert int(dut.debug_wb_data.value) == data
+    assert int(dut.debug_wb_data.value) == (data & 0xFFFFFFFF)
 
     await RisingEdge(dut.clk)
     await ReadOnly()
