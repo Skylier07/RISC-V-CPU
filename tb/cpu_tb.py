@@ -8,37 +8,7 @@ import random
 from cocotb.triggers import RisingEdge, ReadOnly, FallingEdge, NextTimeStep, Timer
 from cocotb.clock import Clock
 
-#helpers
-async def reset_dut(dut):
-    
-    dut.reset.value = 1
-
-    await RisingEdge(dut.clk)
-    await RisingEdge(dut.clk)
-
-    dut.reset.value =0
-    await RisingEdge(dut.clk)
-
-
-async def get_current_address(dut):
-    return dut.instruction_addr.value
-
-# Program Counter
-async def setup_dut(dut):
-    Clock(dut.clk, 10, unit="ns").start()
-    await reset_dut(dut)
-
-# Instruction Decode
-async def build_instruct(op, rd, funct3, rs1, rs2, funct7):
-    instruction = 0
-    instruction |= (op & 0x7F)
-    instruction |= (rd     & 0x1F) << 7
-    instruction |= (funct3 & 0x07) << 12
-    instruction |= (rs1    & 0x1F) << 15
-    instruction |= (rs2    & 0x1F) << 20
-    instruction |= (funct7 & 0x7F) << 25
-
-    return instruction
+from cpu_tb_helper import *
 
 
 @cocotb.test()
@@ -47,6 +17,7 @@ async def test_reset(dut):
     await reset_dut(dut)
 
     assert(await get_current_address(dut) == 0)
+    
 
 
 # Program Counter Test
@@ -85,4 +56,38 @@ async def test_instruction_decode(dut):
         assert int(dut.funct7.value) == funct7
 
 
-    
+
+
+
+@cocotb.test()
+async def test_cpu_arithmetic(dut):
+    await setup_dut(dut)
+
+    # ADDI x1, x0, 15
+    await execute_instruction(
+        dut,
+        encode_i(1, 0, 15),
+        pc=0,
+        rd=1,
+        data=15
+    )
+
+    # ADDI x2, x0, 8
+    await execute_instruction(
+        dut,
+        encode_i(2, 0, 8),
+        pc=4,
+        rd=2,
+        data=8
+    )
+
+    # ADD x3, x1, x2
+    await execute_instruction(
+        dut,
+        await encode_r(
+            3, 1, 2, 0b000, 0b0000000
+        ),
+        pc=8,
+        rd=3,
+        data=23
+    )
