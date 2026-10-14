@@ -180,3 +180,81 @@ async def test_cpu_logic(dut):
         rd=5,
         data=0b1100
     )
+
+    # ANDI x6, x2, b'1001
+    await execute_instruction(
+        dut,
+        encode_i(
+            6, 2, 0b1001, 0b111
+        ),
+        pc=20,
+        rd=6,
+        data=0b1000
+    )
+
+    # ORI x7, x2, b'1001
+    await execute_instruction(
+        dut,
+        encode_i(
+            7, 2, 0b1001, 0b110
+        ),
+        pc=24,
+        rd=7,
+        data=0b1111
+    )
+
+    # XORI x8, x2, b'1001
+    await execute_instruction(
+        dut,
+        encode_i(
+            8, 2, 0b1001, 0b100
+        ),
+        pc=28,
+        rd=8,
+        data=0b0111
+    )
+
+    # SLT x9, x2, x1
+    await execute_instruction(
+        dut,
+        encode_r(
+            9, 2, 1, 0b010, 0b0000000
+        ),
+        pc=32,
+        rd=9,
+        data=0b0
+    )
+
+    # SLT x10, x1, x2
+    await execute_instruction(
+        dut,
+        encode_r(
+            10, 1, 2, 0b010, 0b0000000
+        ),
+        pc=36,
+        rd=10,
+        data=0b1
+    )
+
+
+    # SLTI x11, x2, 0b1111
+    await execute_instruction(
+        dut,
+        encode_i(
+            11, 2, 0b1111, 0b010
+        ),
+        pc=40,
+        rd=11,
+        data=0b1
+    )
+
+    # SLT x12, x2, 0b0011
+    await execute_instruction(
+        dut,
+        encode_i(
+            12, 2, 0b0011, 0b010
+        ),
+        pc=44,
+        rd=12,
+        data=0b0
+    )
